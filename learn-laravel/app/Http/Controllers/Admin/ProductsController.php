@@ -87,6 +87,7 @@ class ProductsController extends Controller
     // Xử lý xóa sản phẩm
     public function destroy($id)
     {
-        //
+        //  
     }
 }
+//nhung
