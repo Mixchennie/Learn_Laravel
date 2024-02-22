@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
+use App\Http\Controllers\Admin\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,6 +17,10 @@ use App\Http\Controllers\Admin\ProductsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/', function(){
+    return '<h1 style="text-align: center";> TRANG CHỦ UNICOE</h1>';
+})->name('home');
 
 // Clients route
 Route::prefix('categories')->group(function(){
@@ -32,6 +38,11 @@ Route::prefix('categories')->group(function(){
     Route::get('/delete/{id}', [CategoriesController::class, 'deleteCategory'])->name('categories.delete');
 });
 // Admin route
+
+Route::middleware('auth.admin')->prefix('admin')->group(function(){
+    Route::get('/', [DashboardController::class, 'index']);
+    Route::resource('products',ProductsController::class)->middleware('auth.admin.product');
 Route::prefix('admin')->group(function(){
     Route::resource('products',ProductsController::class);
+
 });

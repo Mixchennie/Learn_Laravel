@@ -7,11 +7,19 @@ use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
+
+    public function __construct()
+    {
+        // echo "Product khởi động";
+        // Sử dụng season để check login
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         echo "Danh sách sản phẩm";
@@ -87,6 +95,6 @@ class ProductsController extends Controller
     // Xử lý xóa sản phẩm
     public function destroy($id)
     {
-        //
+
     }
 }
