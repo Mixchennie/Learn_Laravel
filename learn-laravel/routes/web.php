@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
-use App\Http\Controllers\homecontroller;
-
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\Admin\ProductsController;
+use App\Http\Controllers\Admin\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,67 +18,31 @@ use App\Http\Controllers\homecontroller;
 |
 */
 
-Route::get('/', function () {
-    $html= "<h1>Học lập trình tại Unicode</h1>";
-    return $html;
+Route::get('/', function(){
+    return '<h1 style="text-align: center";> TRANG CHỦ UNICOE</h1>';
+})->name('home');
+
+// Clients route
+Route::prefix('categories')->group(function(){
+    // danh sách chuyên mục
+    Route::get('/', [CategoriesController::class, 'index'])->name('categories.list');
+    // Lấy chi tiết 1 chuyên mục(Áp dụng show form sửa chuyên mục)
+    Route::get('/edit/{id}', [CategoriesController::class, 'getCategory'])->name('categories.edit');
+    // Xử lý update chuyên mục
+    Route::post('/edit/{id}', [CategoriesController::class, 'updateCategory']);
+    // Hiển thị form chuyên mục
+    Route::get('/add', [CategoriesController::class, 'addCategory'])->name('categories.add');
+    // Xử lý thêm chuyên mục
+    Route::post('/add', [CategoriesController::class, 'handleAddCategory']);
+    // Hiển thị form chuyên mục
+    Route::get('/delete/{id}', [CategoriesController::class, 'deleteCategory'])->name('categories.delete');
 });
+// Admin route
 
-// Route::get('/unicode', function () {
-//     return "Phương thức get của path/unicode";
-// });
-// Route::get('/unicode', function () {
-//     return view('form');
-// });
+Route::middleware('auth.admin')->prefix('admin')->group(function(){
+    Route::get('/', [DashboardController::class, 'index']);
+    Route::resource('products',ProductsController::class)->middleware('auth.admin.product');
+Route::prefix('admin')->group(function(){
+    Route::resource('products',ProductsController::class);
 
-// Route::post('/unicode', function () {
-//     return "Phương thức post của path/unicode";
-// });
-// Route::put('/unicode', function () {
-//     return "Phương thức put của path/unicode";
-// });
-// Route::delete('/unicode', function () {
-//     return "Phương thức delete của path/unicode";
-// });
-// Route::patch('/unicode', function () {
-//     return "Phương thức patch của path/unicode";
-// });
-// Route::any('/unicode', function (Request $request) {
-//     return $request->method();
-// });
-// Route::get('show-form', function () {
-//         return view('form');
-// });
-// Route::redirect('/unicode', 'show-form', 404);
-// Route::view('show-form', 'form');
-
-
-Route::get('/','App\Http\Controllers\HomeController@index')->name('home');
-Route::get('/tin-tuc','App\Http\Controllers\HomeController@getNews')->name('news');
-Route::get('/chuyen-muc/{id}',[homecontroller::class, 'getCategories']);
-
-Route:Route::prefix('admin')->group(function(){
-    // Matches The "/url/users" URL
-    Route::get('tin-tuc/{id?}/{slug?}.html', function ($id=null,$slug=null) {
-        $content ='Phương thức get của path/unicode với tham số: ';
-        $content.= 'id = '.$id. '<br/>';
-        $content.= 'slug = '.$slug;
-        return $content;
-    })-> where('id','\d+')->where('slug', '.+')->name('admin.tintuc');
-    Route::get('show-form', function () {
-            return view('form');
-    }) ->name('admin.show-form');
-    Route::prefix('products')->middleware('checkpermission')->group(function(){
-        Route::get('/', function () {
-            return 'Danh sách sản phẩm';
-        });
-        Route::get('add', function () {
-            return 'Thêm sản phẩm';
-        })->name('admin.products.add');
-        Route::get('edit', function () {
-            return 'Sửa sản phẩm';
-        });
-        Route::get('delete', function () {
-            return 'Xóa sản phẩm';
-        });
-    });
 });
