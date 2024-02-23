@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\DashboardController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,9 +19,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
-Route::get('/', function(){
-    return '<h1 style="text-align: center";> TRANG CHỦ UNICOE</h1>';
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Clients route
 Route::prefix('categories')->group(function(){
@@ -37,12 +36,15 @@ Route::prefix('categories')->group(function(){
     // Hiển thị form chuyên mục
     Route::get('/delete/{id}', [CategoriesController::class, 'deleteCategory'])->name('categories.delete');
 });
+Route::get('san-pham/{id}', [HomeController::class, 'getProductDetail']);
 // Admin route
 
 Route::middleware('auth.admin')->prefix('admin')->group(function(){
     Route::get('/', [DashboardController::class, 'index']);
-    Route::resource('products',ProductsController::class)->middleware('auth.admin.product');
-Route::prefix('admin')->group(function(){
-    Route::resource('products',ProductsController::class);
-
+    Route::resource('products', ProductsController::class)->middleware('auth.admin.product');
+    
+    Route::prefix('admin')->group(function(){
+        Route::resource('products', ProductsController::class);
+    });
 });
+
