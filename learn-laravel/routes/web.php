@@ -19,10 +19,10 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('auth.admin');
 
 // Clients route
-Route::prefix('categories')->group(function(){
+Route::middleware('auth.admin')->prefix('categories')->group(function(){
     // danh sách chuyên mục
     Route::get('/', [CategoriesController::class, 'index'])->name('categories.list');
     // Lấy chi tiết 1 chuyên mục(Áp dụng show form sửa chuyên mục)
@@ -42,9 +42,5 @@ Route::get('san-pham/{id}', [HomeController::class, 'getProductDetail']);
 Route::middleware('auth.admin')->prefix('admin')->group(function(){
     Route::get('/', [DashboardController::class, 'index']);
     Route::resource('products', ProductsController::class)->middleware('auth.admin.product');
-    
-    Route::prefix('admin')->group(function(){
-        Route::resource('products', ProductsController::class);
-    });
 });
 
