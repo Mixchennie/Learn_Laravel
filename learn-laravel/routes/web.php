@@ -2,11 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\Admin\ProductsController;
-use App\Http\Controllers\Admin\DashboardController;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
 use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
@@ -18,33 +14,5 @@ use App\Http\Controllers\HomeController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('auth.admin');
-
-// Clients route
-Route::middleware('auth.admin')->prefix('categories')->group(function(){
-    // danh sách chuyên mục
-    Route::get('/', [CategoriesController::class, 'index'])->name('categories.list');
-    // Lấy chi tiết 1 chuyên mục(Áp dụng show form sửa chuyên mục)
-    Route::get('/edit/{id}', [CategoriesController::class, 'getCategory'])->name('categories.edit');
-    // Xử lý update chuyên mục
-    Route::post('/edit/{id}', [CategoriesController::class, 'updateCategory']);
-    // Hiển thị form chuyên mục
-    Route::get('/add', [CategoriesController::class, 'addCategory'])->name('categories.add');
-    // Xử lý thêm chuyên mục
-    Route::post('/add', [CategoriesController::class, 'handleAddCategory']);
-    // Xóa chuyên mục
-    Route::get('/delete/{id}', [CategoriesController::class, 'deleteCategory'])->name('categories.delete');
-    // Hiển thị form upload
-    Route::get('/upload', [CategoriesController::class,'getFile']);
-    // Xử lý file
-    Route::post('/upload', [CategoriesController::class,'handleFile'])->name('categories.upload');
-});
-Route::get('san-pham/{id}', [HomeController::class, 'getProductDetail']);
-// Admin route
-
-Route::middleware('auth.admin')->prefix('admin')->group(function(){
-    Route::get('/', [DashboardController::class, 'index']);
-    Route::resource('products', ProductsController::class)->middleware('auth.admin.product');
-});
+Route::get('/', [HomeController::class, 'index']);
 
