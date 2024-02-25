@@ -45,9 +45,12 @@ class CategoriesController extends Controller
         // $id = $request ->input('id.*.name');
         // $id = $request->id;
         // $name =$request->name;
+        // $id = $request->query('id');
         // dd($id);
-        $name = request('name', 'Unicode');
-        dd($name);
+        // $query =$request ->query();
+        // dd($query);
+        // $name = request('name', 'Unicode');
+        // dd($name);
         return view("clients/categories/list");
     }
     // Lấy ra một chuyên mục theo id (Phương thức GET)
@@ -60,8 +63,11 @@ class CategoriesController extends Controller
     }
     // Show form thêm dữ liệu (Phương thức GET)
     public function addCategory(Request $request){
-        $path = $request->path();
-        echo $path;
+        // $path = $request->path();
+        // echo $path;
+        // $old = $request->old('category_name');
+        // echo $old;
+        $cateName = $request->old('category_name', 'Mặc định');
         return view("clients/categories/add");
     }
     // Thêm dữ liệu vào chuyên mục (Phương thức POST)
@@ -76,9 +82,41 @@ class CategoriesController extends Controller
         // }
         // return redirect(route('categories.add'));
         // return "Submit thêm chuyên mục";
+        // $cateName = $request->query();
+        if ($request->has('category_name')){
+            $cateName = $request->has('category_name');
+            $request->flash();//set sesion flash
+            return redirect(route('categories.add'));
+        }else{
+            return 'không có category_name';
+        }
     }
     // Xóa dữ liệu (Phương thức delete)
     public function deleteCategory($id){
         return "Submit xóa chuyên mục".$id;
     }
+
+    public function getFile(){
+        return view('clients/categories/file');
+    }
+    // Xử lý lấy thông tin file
+    public function handleFile(Request $request){
+       if($request->hasFile('photo')){
+        if ($request->photo->isValid()){
+            $file = $request ->file('photo');
+            // $path = $file-> path();
+            $ext = $file-> extension();
+            // $path = $file->store('images', 'local');
+            // $path = $file->storeAs('file-txt', 'khoa-hoc.txt');
+            // $fileName = $file ->getClientMimeType();
+            // Đổi tên
+            $fileName = md5(uniqid()).'.'.$ext;
+            // dd($fileName);
+
+        }
+       }else{
+        return 'Upload không thành công';
+       }
+    }
 }
+

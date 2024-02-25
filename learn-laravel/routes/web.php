@@ -33,8 +33,12 @@ Route::middleware('auth.admin')->prefix('categories')->group(function(){
     Route::get('/add', [CategoriesController::class, 'addCategory'])->name('categories.add');
     // Xử lý thêm chuyên mục
     Route::post('/add', [CategoriesController::class, 'handleAddCategory']);
-    // Hiển thị form chuyên mục
+    // Xóa chuyên mục
     Route::get('/delete/{id}', [CategoriesController::class, 'deleteCategory'])->name('categories.delete');
+    // Hiển thị form upload
+    Route::get('/upload', [CategoriesController::class,'getFile']);
+    // Xử lý file
+    Route::post('/upload', [CategoriesController::class,'handleFile'])->name('categories.upload');
 });
 Route::get('san-pham/{id}', [HomeController::class, 'getProductDetail']);
 // Admin route
