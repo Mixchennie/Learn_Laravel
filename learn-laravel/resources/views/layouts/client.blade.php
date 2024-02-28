@@ -35,5 +35,6 @@
     <script src="assets/clents/js/custom.js">
     </script>
     @yield('js')
+    @stack('scripts')
 </body>
 </html>
