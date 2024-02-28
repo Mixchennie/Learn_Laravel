@@ -10,10 +10,18 @@
 
 @section('content')
     <h1>SẢN PHẨM</h1>
-    <button type="button" class="show">Show</button>
-@endsection
+    @push('scripts')
+    <script>
+        console.log('Push lần 2')
+    </script> 
+    @endsection
 
 @section('css')
 @endsection
 @section('js')
+@prepend('scripts')
+    <script>
+        console.log('Push lần 1')
+    </script>
+@endprepend
 @endsection
