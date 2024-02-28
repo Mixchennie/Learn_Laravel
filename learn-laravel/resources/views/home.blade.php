@@ -4,9 +4,7 @@
     {!! !empty($content)?$content:false !!}
 </div>
 <hr>
-@for ($i =1; $i<=10; $i++)
-    @if ($i==5)
-        @continue
-        @endif
-        <p>Phần tử thứ: {{$i}}</p>
-@endfor
+@php
+    // $message = "Đặt hàng thành công";
+@endphp   
+@include('parts.notice');
