@@ -10,12 +10,17 @@
 
 @section('content')
     <h1>Trang Chủ</h1>
-    @datetime('2024-02-29 05:00:00')
    @include('clients.contents.slide')
    @include('clients.contents.about')
-   @datetime('2024-03-29 05:30:00')
 
+   @env('production')
+   <p>Môi trường production</p>
+   @elseenv('test')
 
+   <p>Môi trường test</p>
+   @else
+   <p>Môi trường dev</p>
+   @endenv
 @endsection
 
 @section('css')
