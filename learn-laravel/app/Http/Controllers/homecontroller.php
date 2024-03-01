@@ -11,6 +11,9 @@ class HomeController extends Controller
     //Action index()
     public function index(){
         $this->data['title'] = 'Đào tạo lập trình web';
+        $this->data['message'] = 'Đăng ký tài khoản thành công';
+
+
         return view('clients.home', $this->data);
     }
     public function products(){
