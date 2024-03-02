@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\HomeController;
+use Illuminate\Http\Response;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,9 +22,28 @@ Route::get('/them-san-pham', [HomeController::class, 'getAdd']);
 // Route::post('/them-san-pham', [HomeController::class, 'postAdd']);
 Route::put('/them-san-pham', [HomeController::class, 'putAdd']);
 
+Route::get('demo-response', function () {
+    $contentArr = [
+        'name' => 'Laravel 8.x',
+        'lesson' => 'Khóa học lập trình Laravel',
+        'academy' => 'Unicode Academy'
+    ];
+    return $contentArr;
+});
 
+Route::get('lay-thong-tin', [HomeController::class, 'getArr']);
 
+Route::get('demo-response', function () { 
+    // return view('clients.contents.demo-test');
+    $response = response()
+    ->view('clients.contents.demo-test',[
+        'title' => 'Học Http response',
+    ], 201)
+    ->header('Content-Type', 'application/json')
+    ->header('API-key', '123456');
+    return $response;
+});
 
-
-
-
+// Route::get('demo-response-2', function (Request $request){
+//     return $request->cookie('unicode');
+// });
