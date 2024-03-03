@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
@@ -40,5 +41,34 @@ class HomeController extends Controller
             'academy' => 'Unicode Academy'
         ];
         return $contentArr;
+    }
+
+    public function downloadImage(Request $request){
+        if (!empty($request->image)){
+            $image = trim($request->image);
+            $fileName = 'image_'.uniqid().'.jpg';
+            $fileName = basename($image);
+            // return response()->streamDownload(function() use($image) {
+            //     $imageContent = file_get_contents($image);
+            //     echo $imageContent;
+            // }, '$fileName');
+
+            return response()->download($image, $fileName);
+        }
+    }
+    public function downloadDoc(Request $request){
+        if (!empty($request->file)){
+            $file = trim($request->image);
+            $fileName = 'tai-lieu'.uniqid().'.pdf';
+            // $fileName = basename($image);
+            // return response()->streamDownload(function() use($image) {
+            //     $imageContent = file_get_contents($image);
+            //     echo $imageContent;
+            // }, '$fileName');
+            $headers = [
+                'Content-Type' =>'application/pdf'
+            ];
+            return response()->download($file, $fileName);
+        }
     }
 }

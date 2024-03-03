@@ -33,3 +33,7 @@ Route::post('demo-response', function(Request $request){
     }
     return redirect(route('demo-response'))->with('mess', 'Validate không thành công');
 });
+
+Route::get('download-image', [HomeController::class, 'downloadImage'])->name('download-image');
+Route::get('download-doc', [HomeController::class, 'downloadImage'])->name('download-image');
+
