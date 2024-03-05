@@ -19,10 +19,10 @@
     @endenv
 
     <x-alert type="info" :content="$message" data-icon="youtube"/>
-    <p><img src="https://cdn.pixabay.com/photo/2016/07/11/15/43/woman-1509959_640.jpg" alt=""></p>
+    {{-- <p><img src="https://cdn.pixabay.com/photo/2016/07/11/15/43/woman-1509959_640.jpg" alt=""></p>
     <p><a href="{{ route('download-image') }}'?image='. public_path('storage/image-01.jpg')}}" class="btn btn-primary">Download ảnh</a></p>
     <p><a href="{{ route('download-doc') }}.'?file='.public_path('storage/Group report Universe pink.pdf')}}" class="btn btn-primary">Download tài liệu</a></p>
-@endsection
+@endsection --}}
 @section('css')  
     <style>
         img{
