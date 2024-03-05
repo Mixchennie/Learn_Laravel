@@ -24,11 +24,29 @@ class HomeController extends Controller
 
     public function getAdd(){
         $this->data['title'] = 'Thêm sản phẩm';
+        $this->data['erroeMessage'] = 'Vui lòng kiểm tra lại dữ liệu';
 
         return view('clients.add',$this->data);
     }
     public function postAdd(Request $request){
-       dd($request);
+        $rules= [
+            'product_name'=>'required|min:6',
+            'product_price'=> 'required|integer'
+        ];
+        // $messages = [
+        //     'product_name.required'=> 'Trường :attribute bắt buộc phải nhập',
+        //     'product_name.min'=> 'Tên sản phẩm không được nhỏ hơn :min ký tự',
+        //     'product_price.required'=> 'Giá sản phẩm bắt buộc phải nhập',
+        //     'product_price.integer'=> 'Giá sản phẩm phải là số',
+
+        // ];
+        $messages = [
+            'required' => "Trường :attribute bắt buộc phải nhập",
+            'min'=> 'Trường :attribute không được nhỏ hơn :min ký tự',
+            'integer'=> 'Trường :attribute phải là số'
+        ];
+        $request->validate($rules, $messages);
+        // Xử lý việc thêm dữ liệu vào db
     }
     public function putAdd(Request $request){
         return 'Phương thức  PUT';

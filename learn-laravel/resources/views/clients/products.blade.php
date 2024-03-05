@@ -1,28 +1,27 @@
-@extends('layouts.client');
-@section('title')
-    {{$title}}
-@endsection
+@extends('layouts.client')
 
-{{-- @section('sidebar')
-    @parent 
-    <h3>Products Sidebar</h3>
-@endsection --}}
+@section('title', $title)
 
 @section('content')
     <h1>SẢN PHẨM</h1>
-   <x-package-alert /><x-package-alert /> 
-    @push('scripts')
+    <x-package-alert />
+    <x-package-alert />
+@endsection
+
+@push('scripts')
     <script>
         console.log('Push lần 2')
-    </script> 
-    @endsection
+    </script>
+@endpush
 
 @section('css')
+    {{-- Add your CSS code here if needed --}}
 @endsection
+
 @section('js')
-@prepend('scripts')
-    <script>
-        console.log('Push lần 1')
-    </script>
-@endprepend
+    @prepend('scripts')
+        <script>
+            console.log('Push lần 1')
+        </script>
+    @endprepend
 @endsection
