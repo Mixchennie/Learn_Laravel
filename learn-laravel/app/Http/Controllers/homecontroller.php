@@ -30,7 +30,7 @@ class HomeController extends Controller
         return view('clients.add',$this->data);
     }
     public function postAdd(ProductRequest $reqquest){
-        dd($reqquest);
+        dd($reqquest->all());
         // $rules= [
         //     'product_name'=>'required|min:6',
         //     'product_price'=> 'required|integer'

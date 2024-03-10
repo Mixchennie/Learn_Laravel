@@ -6,7 +6,12 @@
     @parent 
     <h3>Home Sidebar</h3>
 @endsection
+
 @section('content')
+    @if (session('msg'))
+    <div class="alert alert-{{session('type')}}">
+        {{session('msg')}}
+    </div>
     <h1>Trang Chủ</h1>
     @include('clients.contents.slide')
     @include('clients.contents.about')
