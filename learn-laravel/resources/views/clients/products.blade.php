@@ -3,9 +3,11 @@
 @section('title', $title)
 
 @section('content')
+    @if(session('smg'))
+    <div class="alert alert-success">{{session('smg')}}</div>
+    @endif
     <h1>SẢN PHẨM</h1>
-    <x-package-alert />
-    <x-package-alert />
+
 @endsection
 
 @push('scripts')
