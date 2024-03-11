@@ -34,8 +34,10 @@ class HomeController extends Controller
     public function postAdd(Request $request)
     {
         $rules = [
-            'product_name' => ['required','min:6', new Uppercase],
-            'product_price' => ['required','integer', new Uppercase]
+            'product_name' => ['required','min:6', function($attribute, $value, $fail){
+               isUppercase($value,'Trường :attribute không hợp lệ', $fail);
+            }],
+            'product_price' => ['required','integer']
         ];
 
         // $messages = [
@@ -122,4 +124,5 @@ class HomeController extends Controller
             return response()->download($file, $fileName, $headers);
         }
     }
+    
 }
