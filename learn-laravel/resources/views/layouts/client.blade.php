@@ -32,9 +32,9 @@
     </main>
     @include('clients.blocks.footer')
     
-    <script src="assets/clents/js/bootstrap.min.js"></script>
-    <script src="assets/clents/js/custom.js">
-    </script>
+    <script src="{{asset('asset/clents/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('assets/clents/js/custom.js')}}"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery"></script>
     @yield('js')
     @stack('scripts')
 </body>

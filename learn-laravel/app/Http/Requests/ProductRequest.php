@@ -15,7 +15,7 @@ class ProductRequest extends FormRequest
      */
     protected function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
