@@ -1,6 +1,8 @@
 @extends('layouts.client')
 
-@section('title', $title)
+@section('title')
+    {{$title}}
+@endsection
 
 @section('content')
     @if(session('smg'))
