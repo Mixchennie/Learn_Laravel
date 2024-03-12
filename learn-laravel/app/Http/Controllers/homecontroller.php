@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\ProductRequest;
 use App\Rules\Uppercase;
+use Illuminate\Support\Facades\DB;
+// use DB;
 
 class HomeController extends Controller
 {
@@ -13,7 +15,8 @@ class HomeController extends Controller
     {
         $data['title'] = 'Đào tạo lập trình web';
         $data['message'] = 'Đăng ký tài khoản thành công';
-
+        $users = DB::select('SELECT * FROM users WHERE email=:email', ['email'=>'nhung@gmail.com']);
+        dd($users);
         return view('clients.home', $data);
     }
 
