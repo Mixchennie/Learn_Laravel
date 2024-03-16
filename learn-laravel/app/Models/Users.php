@@ -39,14 +39,24 @@ class Users extends Model
         return DB::statement($sql);
      }
      public function learnQueryBuilder(){
+        DB::enableQueryLog();
+        // lấy tất cả bản ghi của table
+        $id = 20;
         $lists = DB::table($this->table)
-        // ->where('id', '>=', 19)
-        //-> where('id', '<>', 19)
-        ->select('fullname as hoten', 'eamil')
-        ->where ('id', 19)
-        ->orWhere('id', 20)
+        ->select('fullname as hoten', 'eamil', 'id')
+        // ->where('id', 18)
+        //-> where(function ($query) use ($id){
+            //   $query->where('id','<',$id)->orWhere('id', '>', $id);
+        // })
+        // ->where ('fullname', 'Like', '%van quan%')
+        // ->whereBetween('id', [18, 20])
+        // ->whereNotBetween('id', [18, 20])
+        // ->whereNotIn('id), [18,20])
+        ->whereNull('update')
         ->get();
-        dd($lists);
+        // ->toSql();
+        $sql = DB::getQueryLog();
+        dd($sql);
 
         $detail = DB::table($this->table)->first();
      }
