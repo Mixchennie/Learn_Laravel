@@ -60,10 +60,21 @@ class Users extends Model
 
         // join bảng
         $lists = DB::table('users')
-        ->select('users.*', 'group.name as group_name')
-        ->rightJoinJoin('groups', 'users.group_id', '=', 'group.id')
+        // ->select('users.*', 'group.name as group_name')
+        // ->rightJoinJoin('groups', 'users.group_id', '=', 'group.id')
+        // ->orderBy('create_at', 'asc')
+        // ->orderBy('id', 'desc')
+        // ->inRandomOrrders()
+        // ->select(DB::raw('count(id) as email_count'), 'email', 'fullname')
+        // ->groupBy('email')
+        // ->groupBy('fullname')
+        // ->having('email_count', '>=', 2)
+        // ->limit(2)
+        // ->offset(2)
+        ->take(2)
+        ->skip(2)
         ->get();
-        dd($lists);
+        // dd($lists);
         $sql = DB::getQueryLog();
         dd($sql);
 
