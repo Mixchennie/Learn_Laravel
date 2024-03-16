@@ -42,8 +42,8 @@ class Users extends Model
         DB::enableQueryLog();
         // lấy tất cả bản ghi của table
         $id = 20;
-        $lists = DB::table($this->table)
-        ->select('fullname as hoten', 'eamil', 'id')
+        // $lists = DB::table($this->table)
+        // ->select('fullname as hoten', 'eamil', 'id')
         // ->where('id', 18)
         //-> where(function ($query) use ($id){
             //   $query->where('id','<',$id)->orWhere('id', '>', $id);
@@ -52,9 +52,18 @@ class Users extends Model
         // ->whereBetween('id', [18, 20])
         // ->whereNotBetween('id', [18, 20])
         // ->whereNotIn('id), [18,20])
-        ->whereNull('update')
-        ->get();
+        // ->whereNull('update')
+        // ->whereYear('create_at', '2021')
+        // whereColumn('create_at', '<>', 'update_at)
+        // ->get();
         // ->toSql();
+
+        // join bảng
+        $lists = DB::table('users')
+        ->select('users.*', 'group.name as group_name')
+        ->rightJoinJoin('groups', 'users.group_id', '=', 'group.id')
+        ->get();
+        dd($lists);
         $sql = DB::getQueryLog();
         dd($sql);
 
