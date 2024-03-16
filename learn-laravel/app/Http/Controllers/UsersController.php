@@ -18,6 +18,7 @@ class UsersController extends Controller
     {
         $statement = $this ->users->statementUser('DELETE  FROM users');
         $title = 'Danh sách người dùng';
+        $this->users->learnQueryBuilder();
         $users = new Users();
 
         $usersList = $users->getAllUsers();

@@ -38,4 +38,16 @@ class Users extends Model
     public function statementUser($sql){
         return DB::statement($sql);
      }
+     public function learnQueryBuilder(){
+        $lists = DB::table($this->table)
+        // ->where('id', '>=', 19)
+        //-> where('id', '<>', 19)
+        ->select('fullname as hoten', 'eamil')
+        ->where ('id', 19)
+        ->orWhere('id', 20)
+        ->get();
+        dd($lists);
+
+        $detail = DB::table($this->table)->first();
+     }
 }
