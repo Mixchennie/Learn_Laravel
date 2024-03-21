@@ -59,11 +59,45 @@ class Users extends Model
         // ->toSql();
 
         // join bảng
-        $lists = DB::table('users')
-        ->select('users.*', 'group.name as group_name')
-        ->rightJoinJoin('groups', 'users.group_id', '=', 'group.id')
-        ->get();
-        dd($lists);
+        // $lists = DB::table('users')
+        // ->select('users.*', 'group.name as group_name')
+        // ->rightJoinJoin('groups', 'users.group_id', '=', 'group.id')
+        // ->orderBy('create_at', 'asc')
+        // ->orderBy('id', 'desc')
+        // ->inRandomOrder()
+        // ->select(DB::raw('count(id) as email_count'), 'email', 'fullname')
+        // ->groupBy('email')
+        // ->groupBy('fullname')
+        // ->having('email_count', '>=', 2)
+        // ->limit(2)
+        // ->offset(2)
+        // ->take(2)
+        // ->skip(2)
+        // ->get();
+        // dd($lists);
+        // DB::table('users')->insert([
+        //     'fullname'=> 'Nguyễn Văn A',
+        //     'email' => 'nguyenvana@gmail.com',
+        //     'group_id' =>1,
+        //     'create_at' => date('Y-m-d H:i:s')
+        // ]);
+        // dd($lastId);
+        // $status = DB::table('user')
+        // ->where('id', 29)
+        // ->update([
+        //     'fullname'=> 'Nguyễn Văn A',
+        //     'email' => 'nguyenvana@gmail.com',
+        //     'update'=> date('Y-m-d H:i:s')
+        // ]);
+        // $status = DB::table('user')
+        // ->where('id', 28)
+        // ->delete();
+
+        // Đếm số bản ghi
+
+        $count = DB::table('users') ->where('id', '>', 20)->count();
+        dd($count);
+
         $sql = DB::getQueryLog();
         dd($sql);
 
