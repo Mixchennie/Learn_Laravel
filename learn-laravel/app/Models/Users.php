@@ -18,8 +18,8 @@ class Users extends Model
     DB::enableQueryLog();
     $users = DB::table($this->table)
     ->select('users.*', 'group.name as group_name')
-    ->join('groups', 'users.group_id', '=', 'groups.id');
-    
+    ->join('groups', 'users.group_id', '=', 'groups.id')
+    ->where('trash', 0);
     $orderBy = 'users.create_at';
     $orderType = 'desc';
     if (!empty($sortByArr) && is_array($sortByArr)){
@@ -67,7 +67,8 @@ class Users extends Model
         return BB::table($this->table)->where('id', $id)->update($data);
     }
     public function deleteUser($id){
-       return DB::delete("DELETE FORM $this->table WHERE ID =?", [$id]);
+    //    return DB::delete("DELETE FORM $this->table WHERE ID =?", [$id]);
+        return DB::table($this->table)->where('id', $id)->delete();
     }
     public function statementUser($sql){
         return DB::statement($sql);
