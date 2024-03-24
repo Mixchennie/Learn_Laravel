@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Users;
+use App\Models\User;
 
 class UsersController extends Controller
 {
@@ -11,17 +11,35 @@ class UsersController extends Controller
 
     public function __construct()
     {
-        $this->users = new Users();
+        $this->users = new User();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $statement = $this ->users->statementUser('DELETE  FROM users');
         $title = 'Danh sách người dùng';
-        $this->users->learnQueryBuilder();
-        $users = new Users();
+        $filters = [];
 
-        $usersList = $users->getAllUsers();
+        if (!empty($request->status)) {
+            $status = $request->status;
+
+            if ($status == 'active') {
+                $status = 1;
+            } else {
+                $status = 0;
+            }
+
+            $filters[] = ['users.status', '=', $status];
+        }
+        if (!empty($request->group_id)) {
+            $groupId = $request->group_id;
+
+            
+            $filters[] = ['users.group_id', '=', $groupId];
+        }
+        if (!empty($request->keywords)) {
+            $keywords = $request->keywords;
+        }
+        $usersList = $this->users->getAllUsers($filters, $keywords);
 
         return view('clients.users.lists', compact('title', 'usersList'));
     }
@@ -36,86 +54,95 @@ class UsersController extends Controller
     {
         $request->validate([
             'fullname' => 'required|min:5',
-            'email' => 'required|email|unique:users' // Fixed validation rule for email
+            'email' => 'required|email|unique:users,email' // Fixed validation rule for email
         ], [
             'fullname.required' => 'Họ và tên bắt buộc phải nhập',
             'fullname.min' => 'Họ và tên phải từ :min ký tự trở lên',
             'email.required' => 'Email bắt buộc phải nhập',
             'email.email' => 'Email không đúng định dạng',
             'email.unique' => 'Email đã tồn tại trên hệ thống',
-
         ]);
 
         $dataInsert = [
-            $request->fullname,
-            $request->email,
-            date('Y-m-d H:i:s') // Fixed column name for created_at
+            'fullname' => $request->fullname,
+            'email' => $request->email,
+            'created_at' => date('Y-m-d H:i:s')
         ];
 
-        $this->users->addUser($dataInsert); // Fixed variable name
+        $this->users->addUser($dataInsert);
 
         return redirect()->route('users.index')->with('msg', 'Thêm người dùng thành công');
     }
 
-    public function getEdit(Request $request, $id=0){
+    public function getEdit(Request $request, $id = 0)
+    {
         $title = 'Cập nhật người dùng';
 
-        if (!empty($id)){
-            $userDetail =  $this ->users->getDetail($id);
-            if (!empty($userDetail[0])){
-                $request->sesion()->store('id', $id);
-                $userDetail= $userDetail[0];
-            }else{
+        if (!empty($id)) {
+            $userDetail = $this->users->getDetail($id);
+
+            if (!empty($userDetail)) {
+                $request->session()->put('id', $id);
+                $userDetail = $userDetail[0];
+            } else {
                 return redirect()->route('users.index')->with('msg', 'Người dùng không tồn tại');
             }
-        }else{
-            return redirect(route('users.index'))->with('msg', 'Liên kết không tồn tại');
+        } else {
+            return redirect()->route('users.index')->with('msg', 'Liên kết không tồn tại');
         }
+
         return view('clients.users.edit', compact('title', 'userDetail'));
-        
     }
-    public function postEdit(Request $request){
-        $id = session('id');
-        if (empty($id)){
-            return back()->with('msg', 'liên kết không tồn tại');
+
+    public function postEdit(Request $request)
+    {
+        $id = $request->session()->get('id');
+
+        if (empty($id)) {
+            return back()->with('msg', 'Liên kết không tồn tại');
         }
+
         $request->validate([
             'fullname' => 'required|min:5',
-            'email' => 'required|email|nique:users,email,'// Fixed validation rule for email
+            'email' => 'required|email|unique:users,email,' . $id // Fixed validation rule for email
         ], [
             'fullname.required' => 'Họ và tên bắt buộc phải nhập',
             'fullname.min' => 'Họ và tên phải từ :min ký tự trở lên',
             'email.required' => 'Email bắt buộc phải nhập',
             'email.email' => 'Email không đúng định dạng',
-            // 'email.unique' => 'Email đã tồn tại trên hệ thống',
-
         ]);
+
         $dataUpdate = [
-            $request->fullname,
-            $request->email,
-            date('Y-m-d H:i:s') 
+            'fullname' => $request->fullname,
+            'email' => $request->email,
+            'updated_at' => date('Y-m-d H:i:s')
         ];
+
         $this->users->updateUser($dataUpdate, $id);
 
-        return back()->with('msg','Cập nhật người dùng');
+        return back()->with('msg', 'Cập nhật người dùng thành công');
     }
 
-    public function delete($id=0){
-        if (!empty($id)){
-            $userDetail =  $this ->users->getDetail($id);
-            if (!empty($userDetail[0])){
+    public function delete($id = 0)
+    {
+        if (!empty($id)) {
+            $userDetail = $this->users->getDetail($id);
+
+            if (!empty($userDetail)) {
                 $deleteStatus = $this->users->deleteUser($id);
-                if ($deleteStatus){
+
+                if ($deleteStatus) {
                     $msg = 'Xóa người dùng thành công';
-                }else{
-                    $msg = "bạn không thể xóa người dùng lúc này. Vui lòng thử lại sau";
+                } else {
+                    $msg = "Bạn không thể xóa người dùng lúc này. Vui lòng thử lại sau";
                 }
-            }else{
+            } else {
                 $msg = 'Người dùng không tồn tại';
             }
-        }else{
-            $msg= 'Liên kết không tồn tại';
+        } else {
+            $msg = 'Liên kết không tồn tại';
         }
+
         return redirect(route('users.index'))->with('msg', $msg);
-    }   
+    }
 }
