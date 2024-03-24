@@ -12,7 +12,7 @@ class Users extends Model
 
     protected $table = 'users';
 
-    public function getAllUsers($filters = [], $keywords=null, $sortBy = null)
+    public function getAllUsers($filters = [], $keywords=null, $sortByArr=null, $perPage=null)
     {
     // $users = DB::select('SELECT * FROM users ORDER BY created_at DESC');
     DB::enableQueryLog();
@@ -36,12 +36,17 @@ class Users extends Model
         $users = $users->where(function($query) use ($keywords){
             $query->orWhere('fullname', 'like', '%'.$keywords.'%');
             $query->orWhere('email', 'like', '%'.$keywords.'%');
-
         });
     }
-    $users= $users->get();
-    $sql = DB::getQueryLog();
-    dd($sql);
+    // $users= $users->get();
+    $users = $users->paginate(3);
+    if(!empty($perPage)){
+        $users = $users->paginate($perPage)
+    }else{
+        $users=$users->get();
+    }
+    // $sql = DB::getQueryLog();
+    // dd($sql);
     return $users;
     }
 
