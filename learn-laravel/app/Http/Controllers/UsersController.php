@@ -62,26 +62,42 @@ class UsersController extends Controller
     public function add()
     {
         $title = "Thêm người dùng";
-        return view('clients.users.add', compact('title'));
+        $allGroups = getAllGroups();
+        return view('clients.users.add', compact('title', 'allGroups'));
     }
 
     public function postAdd(Request $request)
     {
         $request->validate([
             'fullname' => 'required|min:5',
-            'email' => 'required|email|unique:users,email' // Fixed validation rule for email
+            'email' => 'required|email|unique:users,email',// Fixed validation rule for email
+            'group_id' => ['required', 'integer', function($attribute, $value, $fail)
+            {
+                if($value==0){
+                    $fail('Bắt buộc phải chọn nhóm');
+                }
+            }],
+            'status'=>'required|integer'
         ], [
             'fullname.required' => 'Họ và tên bắt buộc phải nhập',
             'fullname.min' => 'Họ và tên phải từ :min ký tự trở lên',
             'email.required' => 'Email bắt buộc phải nhập',
             'email.email' => 'Email không đúng định dạng',
             'email.unique' => 'Email đã tồn tại trên hệ thống',
+            'group_id.required'=>'Nhóm không được để trống',
+            'group_id.integer'=>'Nhóm không hợp lệ',
+            'status.required'=>'Trạng thái không được để trống',
+            'status.integer'=>'Trạng thái không hợp lệ',
+            'create_at' =>date('Y-m-d H:i:s')
+
         ]);
 
         $dataInsert = [
             'fullname' => $request->fullname,
             'email' => $request->email,
-            'created_at' => date('Y-m-d H:i:s')
+            'group_id'=>$request->group_id,
+            'status'=>$request->status,
+            // 'created_at' => date('Y-m-d H:i:s')
         ];
 
         $this->users->addUser($dataInsert);
