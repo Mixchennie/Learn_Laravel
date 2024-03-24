@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\UsersRequest;
 
 class UsersController extends Controller
 {
@@ -66,38 +67,15 @@ class UsersController extends Controller
         return view('clients.users.add', compact('title', 'allGroups'));
     }
 
-    public function postAdd(Request $request)
+    public function postAdd(UsersRequest $request)
     {
-        $request->validate([
-            'fullname' => 'required|min:5',
-            'email' => 'required|email|unique:users,email',// Fixed validation rule for email
-            'group_id' => ['required', 'integer', function($attribute, $value, $fail)
-            {
-                if($value==0){
-                    $fail('Bắt buộc phải chọn nhóm');
-                }
-            }],
-            'status'=>'required|integer'
-        ], [
-            'fullname.required' => 'Họ và tên bắt buộc phải nhập',
-            'fullname.min' => 'Họ và tên phải từ :min ký tự trở lên',
-            'email.required' => 'Email bắt buộc phải nhập',
-            'email.email' => 'Email không đúng định dạng',
-            'email.unique' => 'Email đã tồn tại trên hệ thống',
-            'group_id.required'=>'Nhóm không được để trống',
-            'group_id.integer'=>'Nhóm không hợp lệ',
-            'status.required'=>'Trạng thái không được để trống',
-            'status.integer'=>'Trạng thái không hợp lệ',
-            'create_at' =>date('Y-m-d H:i:s')
-
-        ]);
 
         $dataInsert = [
             'fullname' => $request->fullname,
             'email' => $request->email,
             'group_id'=>$request->group_id,
             'status'=>$request->status,
-            // 'created_at' => date('Y-m-d H:i:s')
+            'created_at' => date('Y-m-d H:i:s')
         ];
 
         $this->users->addUser($dataInsert);
@@ -121,32 +99,25 @@ class UsersController extends Controller
         } else {
             return redirect()->route('users.index')->with('msg', 'Liên kết không tồn tại');
         }
+        $allGroups = getAllGroups();
 
-        return view('clients.users.edit', compact('title', 'userDetail'));
+        return view('clients.users.edit', compact('title', 'userDetail', 'allGroups'));
     }
 
-    public function postEdit(Request $request)
+    public function postEdit(UsersRequest $request)
     {
-        $id = $request->session()->get('id');
+        $id =session('id');
 
         if (empty($id)) {
             return back()->with('msg', 'Liên kết không tồn tại');
         }
 
-        $request->validate([
-            'fullname' => 'required|min:5',
-            'email' => 'required|email|unique:users,email,' . $id // Fixed validation rule for email
-        ], [
-            'fullname.required' => 'Họ và tên bắt buộc phải nhập',
-            'fullname.min' => 'Họ và tên phải từ :min ký tự trở lên',
-            'email.required' => 'Email bắt buộc phải nhập',
-            'email.email' => 'Email không đúng định dạng',
-        ]);
-
         $dataUpdate = [
             'fullname' => $request->fullname,
             'email' => $request->email,
-            'updated_at' => date('Y-m-d H:i:s')
+            'group_id'=>$request->group_id,
+            'status'=>$request->status,
+            'update_at' => date('Y-m-d H:i:s')
         ];
 
         $this->users->updateUser($dataUpdate, $id);
